@@ -1,31 +1,40 @@
 # Put all students into an array
 
 students_hash = [
-  {name: "Dr. Hannibal Lecter", cohort: :november},
-  {name: "Darth Vader",cohort: :november},
-  {name: "Nurse Ratched", cohort: :november},
-  {name: "Michael Corleone", cohort: :november},
-  {name: "Alex DeLarge", cohort: :november},
-  {name: "The Wicked Witch of the West", cohort: :november},
-  {name: "Terminator", cohort: :november},
-  {name: "Freddy Krueger", cohort: :november},
-  {name: "The Joker", cohort: :november},
-  {name: "Joffrey Baratheon", cohort: :november},
-  {name: "Norman Bates", cohort: :november}
+  {name: "Dr. Hannibal Lecter", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Darth Vader",cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Nurse Ratched", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Michael Corleone", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Alex DeLarge", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "The Wicked Witch of the West", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Terminator", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Freddy Krueger", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "The Joker", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Joffrey Baratheon", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Norman Bates", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"}
 ]
 
 def input_students
     puts "Please enter the names of the students"
-    puts "To finish, just hit enter twice"
+    puts "To finish, just hit enter twice when prompted for a name"
     #create an empty array
     students = []
     #get first name
     name = gets.chomp
         #while name is not empty, repeat code
         while !name.empty?
+        #Ask for more details
+        puts "What hobbies do they have?"
+        hobbies = gets.chomp
+        puts "What is their country of birth?"
+        birth_country = gets.chomp
+        puts "What is their height in metres?"
+        height = gets.chomp
         #add student hash to the array
-        students << {name: name, cohort: :november}
+        students << {name: name, cohort: :november, hobbies: hobbies, birth_country: birth_country, height: height}
         puts "Now we have #{students.count} students"
+        puts ""
+        puts "If you want to enter more students, type their name now, otherwise hit enter"
         #Get another name from user
         name = gets.chomp
         end
@@ -40,6 +49,8 @@ def print_header
 end
 
 def print(students)
+    puts "Now we will print the list of students, allowing you to first set some conditions"
+    puts ""
     #Check what conditions the user wants
     puts "Would you like to print only student names that begin with a specific letter?"
     puts "If so, type something in now and the first letter of your input will be taken, otherwise press enter"
@@ -58,7 +69,8 @@ def print(students)
             next
         #Prints index, name and cohort
         else
-        puts (index + 1).to_s + " #{students[index][:name]} (#{students[index][:cohort]} cohort)"
+        puts (index + 1).to_s + " #{students[index][:name]}"
+        puts "Country of birth: #{students[index][:birth_country]}, Height: #{students[index][:height]} metres, Hobbies: #{students[index][:hobbies]},  (#{students[index][:cohort]} cohort)"
         index += 1
         end
     end
@@ -69,7 +81,7 @@ def print_footer(students)
   puts "Overall, we have #{students.count} great students"
 end
 
-students = students_hash
+students = input_students
 print(students)
 
 =begin
