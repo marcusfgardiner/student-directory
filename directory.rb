@@ -133,10 +133,12 @@ def print(students)
     print_header
     #Uses while to iterate through each one rather than each
     index = 0
+    number_excluded = 0
     until (index + 1) > (students.count)
     #Print the names only if meets above user conditions
         if (specific_letter != nil && students[index][:name][0].downcase != specific_letter.downcase) || ((twelve_characters == "yes") && (students[index][:name].length > 11))
             index += 1
+            number_excluded += 1
             next
         #Prints index, name and cohort
         else
@@ -152,12 +154,13 @@ def print(students)
         index += 1
         end
     end
+            puts ""
+        puts "Note: #{number_excluded} student(s) excluded due to applied conditions".center($center)
     print_footer(students)
     typo_handler(students)
 end
 
 def print_footer(students)
-    puts ""
     puts "----------------------".center($center)
             if students.count == 1
                 puts "Overall, we have #{students.count} great student".center($center)
