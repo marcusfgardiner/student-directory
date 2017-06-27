@@ -49,6 +49,13 @@ def print_header
 end
 
 def print(students)
+    left = 20
+    center = 40
+    right = 20
+    if students == []
+        puts "No students provided, exiting program"
+        exit
+    end
     puts "Now we will print the list of students, allowing you to first set some conditions"
     puts ""
     #Check what conditions the user wants
@@ -69,8 +76,11 @@ def print(students)
             next
         #Prints index, name and cohort
         else
-        puts (index + 1).to_s + " #{students[index][:name]}"
-        puts "Country of birth: #{students[index][:birth_country]}, Height: #{students[index][:height]} metres, Hobbies: #{students[index][:hobbies]},  (#{students[index][:cohort]} cohort)"
+        puts ((index + 1).to_s + " #{students[index][:name]}").center(center)
+        puts ("Cohort:".ljust(left) + "#{students[index][:cohort]}".rjust(right))
+        puts ("Country of birth:".ljust(left) + "#{students[index][:birth_country]}".rjust(right))
+        puts ("Height:".ljust(left) + "#{students[index][:height]} metres".rjust(right))
+        puts ("Hobbies:".ljust(left) + "#{students[index][:hobbies]}".rjust(right))
         index += 1
         end
     end
@@ -78,6 +88,7 @@ def print(students)
 end
 
 def print_footer(students)
+  puts ""
   puts "Overall, we have #{students.count} great students"
 end
 
