@@ -20,23 +20,29 @@ def input_students
     #create an empty array
     students = []
     #get first name
-    name = gets.chomp
+    name = gets.strip.to_sym
         #while name is not empty, repeat code
         while !name.empty?
         #Ask for more details
+        puts "What cohort are they from?"
+        cohort = gets.strip.to_sym
         puts "What hobbies do they have?"
-        hobbies = gets.chomp
+        hobbies = gets.strip.to_sym
         puts "What is their country of birth?"
-        birth_country = gets.chomp
+        birth_country = gets.strip.to_sym
         puts "What is their height in metres?"
-        height = gets.chomp
+        height = gets.strip.to_sym
         #add student hash to the array
-        students << {name: name, cohort: :november, hobbies: hobbies, birth_country: birth_country, height: height}
-        puts "Now we have #{students.count} students"
+        students << {name: name, cohort: cohort, hobbies: hobbies, birth_country: birth_country, height: height}
+            if students.count == 1
+                puts "Now we have #{students.count} student"
+            else
+                puts "Now we have #{students.count} students"
+            end 
         puts ""
         puts "If you want to enter more students, type their name now, otherwise hit enter"
         #Get another name from user
-        name = gets.chomp
+        name = gets.strip.to_sym
         end
     #return array of students as method value
     students
@@ -61,10 +67,10 @@ def print(students)
     #Check what conditions the user wants
     puts "Would you like to print only student names that begin with a specific letter?"
     puts "If so, type something in now and the first letter of your input will be taken, otherwise press enter"
-    specific_letter = gets.chomp[0]
+    specific_letter = gets.strip[0]
     puts "Would you like to print only student names that are less than 12 characters?"
     puts "If so, write 'Yes', otherwise press enter"
-    twelve_characters = gets.chomp.downcase
+    twelve_characters = gets.strip.downcase
     puts twelve_characters
     print_header
     #Uses while to iterate through each one rather than each
