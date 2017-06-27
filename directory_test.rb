@@ -40,29 +40,14 @@ def print_header
 end
 
 def print(students)
-    #Check what conditions the user wants
-    puts "Would you like to print only student names that begin with a specific letter?"
-    puts "If so, type something in now and the first letter of your input will be taken, otherwise press enter"
-    specific_letter = gets.chomp[0]
-    puts "Would you like to print only student names that are less than 12 characters?"
-    puts "If so, write 'Yes', otherwise press enter"
-    twelve_characters = gets.chomp.downcase
-    puts twelve_characters
     print_header
     #Uses while to iterate through each one rather than each
     index = 0
-    until (index + 1) > (students.count)
-    #Print the names only if meets above user conditions
-        if (specific_letter != nil && students[index][:name][0].downcase != specific_letter.downcase) || ((twelve_characters == "yes") && (students[index][:name].length > 11))
-            index += 1
-            next
-        #Prints index, name and cohort
-        else
-        puts (index + 1).to_s + " #{students[index][:name]} (#{students[index][:cohort]} cohort)"
-        index += 1
-        end
+    until index > (students.count - 1)
+    #Prints index, name and cohort
+    puts (index + 1).to_s + " #{students[index][:name]} (#{students[index][:cohort]} cohort)"
+    index += 1
     end
-    print_footer(students)
 end
 
 def print_footer(students)
@@ -71,14 +56,4 @@ end
 
 students = students_hash
 print(students)
-
-=begin
-
-each version of printing student names
-
-students.each_with_index {|student, index|
-    next if (specific_letter != nil && student[:name][0].downcase != specific_letter.downcase) || ((twelve_characters == "yes") && (student[:name].length > 11))
-    puts (index + 1).to_s + " #{student[:name]} (#{student[:cohort]} cohort)"
-    }
-
-=end
+print_footer(students)
