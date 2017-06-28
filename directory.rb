@@ -17,8 +17,20 @@ def save_students
     file.close
 end
 
-def load_students
-    file = File.open("students.csv", "r")
+def try_load_students
+    filename = ARGV.first #first argument from command line is taken
+    return if filename.nil? #get out of method if file name not given
+    if File.exists?(filename) #if file exists, do this
+        load_students(filename)
+        puts "Loaded #{@students.count} from #{filename}"
+    else
+        puts "Sorry, #{filename} doesn't exist"
+        exit #quit program
+    end
+end
+
+def load_students(filename = "students.csv")
+    file = File.open(filename, "r")
     file.readlines.each do |line|
     name, cohort = line.chomp.split(',')
         @students << {name: name, cohort: cohort.to_sym}
@@ -55,7 +67,7 @@ end
 def interactive_menu
     loop do
         print_menu
-        process(gets.chomp)
+        process(STDIN.gets.chomp)
     end
 end
 
@@ -69,7 +81,7 @@ def unique_cohorts
 end
 
 def user_input_handler
-    user_input = gets.strip.to_sym
+    user_input = STDIN.gets.strip.to_sym
     if user_input.empty?
         user_input = "No value provided".to_sym
     end
@@ -80,13 +92,13 @@ def typo_handler
     match = false
     puts "From looking at the directory, are there any typos or would you like to add any values where there isn't currently one?"
     puts "If so, write 'Yes', otherwise press enter"
-        typo_check = gets.strip.downcase
+        typo_check = STDIN.gets.strip.downcase
         if typo_check != "yes"
             puts "Perfect, no typos - list confirmed"
         else
             while match == false
             puts "Which name has a typo issue? If you wrote the name with a typo, please write the incorrectly spelled name"
-            name = gets.strip.downcase.to_sym
+            name = STDIN.gets.strip.downcase.to_sym
             index_number = ""
             @students.each_with_index {|student, index|
                 if student[:name].downcase == name
@@ -103,7 +115,7 @@ def typo_handler
                 end
             end
             puts "Which variable has a typo? Choices are Name, Cohort, Hobbies, Country of birth and Height"
-            variables_issue = gets.strip.downcase
+            variables_issue = STDIN.gets.strip.downcase
                 if variables_issue == "name"
                     variables_issue = :name
                 elsif variables_issue == "cohort"
@@ -128,7 +140,7 @@ def input_students
     #create an empty array
     
     #get first name
-    name = gets.strip.to_sym
+    name = STDIN.gets.strip.to_sym
         #while name is not empty, repeat code
         while !name.empty?
         #Ask for more details
@@ -150,7 +162,7 @@ def input_students
         puts ""
         puts "If you want to enter more students, type their name now, otherwise hit enter"
         #Get another name from user
-        name = gets.strip.to_sym
+        name = STDIN.gets.strip.to_sym
         end
 end
 
@@ -168,15 +180,15 @@ def print_students_list
     end
     puts "Now we will print the list of students. Would you like to set any conditions as you print the list?"
     puts "If so, write 'Yes', otherwise press enter"
-        conditions = gets.strip.downcase
+        conditions = STDIN.gets.strip.downcase
         if conditions == "yes"
             #Check what conditions the user wants
             puts "Firstly - Would you like to print only student names that begin with a specific letter?"
             puts "If so, type something in now and the first letter of your input will be taken, otherwise press enter"
-            specific_letter = gets.strip[0]
+            specific_letter = STDIN.gets.strip[0]
             puts "Secondly - Would you like to print only student names that are less than 12 characters?"
             puts "If so, write 'Yes', otherwise press enter"
-            twelve_characters = gets.strip.downcase
+            twelve_characters = STDIN.gets.strip.downcase
         end
     print_header
     
@@ -233,6 +245,7 @@ def print_footer
     puts "----------------------".center($center)
 end
 
+try_load_students
 interactive_menu
 
 =begin
