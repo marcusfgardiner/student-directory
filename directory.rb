@@ -3,21 +3,26 @@ $left = 20
 $center = 40
 $right = 20
 
+@students = []
+
+def print_menu
+    #1. Print the menu and ask what the user wants to do
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "9. Exit" #9 as more items to come
+end
+
 def interactive_menu
-    students = []
     loop do
-        #1. Print the menu and ask what the user wants to do
-        puts "1. Input the students"
-        puts "2. Show the students"
-        puts "9. Exit" #9 as more items to come
+        print_menu
         #2. read the input and save it into a variable
         selection = gets.chomp
         #3. do what the user has asked
         case selection
         when "1"
-            students = input_students
+            input_students
         when "2"
-            print(students)
+            print
         when "9"
             exit #terminates program
         else
@@ -26,8 +31,8 @@ def interactive_menu
     end
 end
 
-def unique_cohorts(students)
-    cohort_array = students.map {|student| 
+def unique_cohorts
+    cohort_array = @students.map {|student| 
     student[:cohort]
     }
     cohort_array.uniq
@@ -43,7 +48,7 @@ def user_input_handler
     user_input
 end
 
-def typo_handler(students)
+def typo_handler
     match = false
     puts "From looking at the directory, are there any typos or would you like to add any values where there isn't currently one?"
     puts "If so, write 'Yes', otherwise press enter"
@@ -55,7 +60,7 @@ def typo_handler(students)
             puts "Which name has a typo issue? If you wrote the name with a typo, please write the incorrectly spelled name"
             name = gets.strip.downcase.to_sym
             index_number = ""
-            students.each_with_index {|student, index|
+            @students.each_with_index {|student, index|
                 if student[:name].downcase == name
                     puts "Name match found, #{name}"
                     index_number = index
@@ -83,9 +88,9 @@ def typo_handler(students)
                     variables_issue = :height
                 end
             puts "What should value be changed to?"
-            students[index_number][variables_issue] = user_input_handler
+            @students[index_number][variables_issue] = user_input_handler
             puts "Typo is now fixed!"
-            print(students)
+            print(@students)
         end
 end
 
@@ -93,9 +98,6 @@ def input_students
     puts "Please enter the names of the students"
     puts "To finish, just hit enter twice when prompted for a name"
     #create an empty array
-    
-    #   TO DELETE NOW HAVE INTERACTIVE MENU ---- ??
-    students = []
     
     #get first name
     name = gets.strip.to_sym
@@ -111,19 +113,17 @@ def input_students
         puts "What is their height in metres?"
         height = user_input_handler
         #add student hash to the array
-        students << {name: name, cohort: cohort, hobbies: hobbies, birth_country: birth_country, height: height}
-            if students.count == 1
-                puts "Now we have #{students.count} student"
+        @students << {name: name, cohort: cohort, hobbies: hobbies, birth_country: birth_country, height: height}
+            if @students.count == 1
+                puts "Now we have #{@students.count} student"
             else
-                puts "Now we have #{students.count} students"
+                puts "Now we have #{@students.count} students"
             end 
         puts ""
         puts "If you want to enter more students, type their name now, otherwise hit enter"
         #Get another name from user
         name = gets.strip.to_sym
         end
-    #return array of students as method value
-    students
 end
 
 
@@ -133,8 +133,8 @@ def print_header
 end
 
 
-def print(students)
-    if students == []
+def print
+    if @students == []
         puts "No students provided, exiting program"
         exit
     end
@@ -153,7 +153,7 @@ def print(students)
     print_header
     
     #Print by cohort
-    cohort_array = unique_cohorts(students)
+    cohort_array = unique_cohorts
     number_excluded = 0
     number_printed = 1
     #Uses while to iterate through each one rather than each
@@ -161,24 +161,24 @@ def print(students)
                 index = 0
                 puts ("Cohort: " + unique_cohort.to_s).center($center)
                 puts "-------".center($center)
-                until (index + 1) > (students.count)
+                until (index + 1) > (@students.count)
                     #IF the cohort matches the cohort we are currently on in the cohort_array, run the printing mechanism
-                    if unique_cohort == students[index][:cohort]
+                    if unique_cohort == @students[index][:cohort]
                     #Print the names only if meets above user conditions and count number of exclusions
-                        if (specific_letter != nil && students[index][:name][0].downcase != specific_letter.downcase) || ((twelve_characters == "yes") && (students[index][:name].length > 11))
+                        if (specific_letter != nil && @students[index][:name][0].downcase != specific_letter.downcase) || ((twelve_characters == "yes") && (@students[index][:name].length > 11))
                             index += 1
                             number_excluded += 1
                             next
                             #Prints index, name and cohort
                         else
-                            puts ((number_printed).to_s + " - #{students[index][:name]}").center($center)
-                            puts ("Country of birth:".ljust($left) + "#{students[index][:birth_country]}".rjust($right))
-                                if students[index][:height] = "No value provided"
-                                    puts ("Height:".ljust($left) + "#{students[index][:height]}".rjust($right))
+                            puts ((number_printed).to_s + " - #{@students[index][:name]}").center($center)
+                            puts ("Country of birth:".ljust($left) + "#{@students[index][:birth_country]}".rjust($right))
+                                if @students[index][:height] = "No value provided"
+                                    puts ("Height:".ljust($left) + "#{@students[index][:height]}".rjust($right))
                                 else 
-                                    puts ("Height:".ljust($left) + "#{students[index][:height]} metres".rjust($right))
+                                    puts ("Height:".ljust($left) + "#{@students[index][:height]} metres".rjust($right))
                                 end
-                            puts ("Hobbies:".ljust($left) + "#{students[index][:hobbies]}".rjust($right))
+                            puts ("Hobbies:".ljust($left) + "#{@students[index][:hobbies]}".rjust($right))
                             index += 1 
                             number_printed += 1
                         end
@@ -190,23 +190,22 @@ def print(students)
             puts ""
         puts "Note: #{number_excluded} student(s) excluded due to applied conditions".center($center)
     
-    print_footer(students)
+    print_footer
     
-    typo_handler(students)
+    typo_handler
 end
 
-def print_footer(students)
+def print_footer
     puts "----------------------".center($center)
-            if students.count == 1
-                puts "Overall, we have #{students.count} great student".center($center)
+            if @students.count == 1
+                puts "Overall, we have #{@students.count} great student".center($center)
             else
-                puts "Overall, we have #{students.count} great students".center($center)
+                puts "Overall, we have #{@students.count} great students".center($center)
             end 
     puts "----------------------".center($center)
 end
 
 interactive_menu
-print(students)
 
 =begin
 
