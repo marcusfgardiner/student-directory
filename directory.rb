@@ -2,6 +2,7 @@
 
 students_hash = [
   {name: "Dr. Hannibal Lecter", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Dr. Hannibal Lecter", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
   {name: "Darth Vader",cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
   {name: "Nurse Ratched", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
   {name: "Michael Corleone", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
@@ -17,6 +18,15 @@ students_hash = [
 $left = 20
 $center = 40
 $right = 20
+
+def unique_cohorts(students)
+    cohort_array = students.map {|student| 
+    student[:cohort]
+    }
+    cohort_array.uniq
+    #Will have array of unique cohorts to iterate through => can print students based on value currently on in cohort array
+    #Then need to use array of cohorts to iterate through full students array and print cohort by cohort
+end
 
 def user_input_handler
     user_input = gets.strip.to_sym
@@ -131,32 +141,47 @@ def print(students)
             twelve_characters = gets.strip.downcase
         end
     print_header
-    #Uses while to iterate through each one rather than each
-    index = 0
+    
+    #Print by cohort
+    cohort_array = unique_cohorts(students)
     number_excluded = 0
-    until (index + 1) > (students.count)
-    #Print the names only if meets above user conditions
-        if (specific_letter != nil && students[index][:name][0].downcase != specific_letter.downcase) || ((twelve_characters == "yes") && (students[index][:name].length > 11))
-            index += 1
-            number_excluded += 1
-            next
-        #Prints index, name and cohort
-        else
-        puts ((index + 1).to_s + " - #{students[index][:name]}").center($center)
-        puts ("Cohort:".ljust($left) + "#{students[index][:cohort]}".rjust($left))
-        puts ("Country of birth:".ljust($left) + "#{students[index][:birth_country]}".rjust($right))
-            if students[index][:height] = "No value provided"
-                puts ("Height:".ljust($left) + "#{students[index][:height]}".rjust($right))
-            else 
-                puts ("Height:".ljust($left) + "#{students[index][:height]} metres".rjust($right))
-            end
-        puts ("Hobbies:".ljust($left) + "#{students[index][:hobbies]}".rjust($right))
-        index += 1
-        end
-    end
+    number_printed = 1
+    #Uses while to iterate through each one rather than each
+            cohort_array.each {|unique_cohort|
+                index = 0
+                puts ("Cohort: " + unique_cohort.to_s).center($center)
+                puts "-------".center($center)
+                until (index + 1) > (students.count)
+                    #IF the cohort matches the cohort we are currently on in the cohort_array, run the printing mechanism
+                    if unique_cohort == students[index][:cohort]
+                    #Print the names only if meets above user conditions and count number of exclusions
+                        if (specific_letter != nil && students[index][:name][0].downcase != specific_letter.downcase) || ((twelve_characters == "yes") && (students[index][:name].length > 11))
+                            index += 1
+                            number_excluded += 1
+                            next
+                            #Prints index, name and cohort
+                        else
+                            puts ((number_printed).to_s + " - #{students[index][:name]}").center($center)
+                            puts ("Country of birth:".ljust($left) + "#{students[index][:birth_country]}".rjust($right))
+                                if students[index][:height] = "No value provided"
+                                    puts ("Height:".ljust($left) + "#{students[index][:height]}".rjust($right))
+                                else 
+                                    puts ("Height:".ljust($left) + "#{students[index][:height]} metres".rjust($right))
+                                end
+                            puts ("Hobbies:".ljust($left) + "#{students[index][:hobbies]}".rjust($right))
+                            index += 1 
+                            number_printed += 1
+                        end
+                    else
+                        index += 1 
+                    end
+                end
+            }
             puts ""
         puts "Note: #{number_excluded} student(s) excluded due to applied conditions".center($center)
+    
     print_footer(students)
+    
     typo_handler(students)
 end
 
@@ -165,7 +190,7 @@ def print_footer(students)
             if students.count == 1
                 puts "Overall, we have #{students.count} great student".center($center)
             else
-                "Overall, we have #{students.count} great students".center($center)
+                puts "Overall, we have #{students.count} great students".center($center)
             end 
     puts "----------------------".center($center)
 end
