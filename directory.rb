@@ -3,6 +3,29 @@ $left = 20
 $center = 40
 $right = 20
 
+def interactive_menu
+    students = []
+    loop do
+        #1. Print the menu and ask what the user wants to do
+        puts "1. Input the students"
+        puts "2. Show the students"
+        puts "9. Exit" #9 as more items to come
+        #2. read the input and save it into a variable
+        selection = gets.chomp
+        #3. do what the user has asked
+        case selection
+        when "1"
+            students = input_students
+        when "2"
+            print(students)
+        when "9"
+            exit #terminates program
+        else
+            puts "I don't know what you meant, please try again"
+        end
+    end
+end
+
 def unique_cohorts(students)
     cohort_array = students.map {|student| 
     student[:cohort]
@@ -70,7 +93,10 @@ def input_students
     puts "Please enter the names of the students"
     puts "To finish, just hit enter twice when prompted for a name"
     #create an empty array
+    
+    #   TO DELETE NOW HAVE INTERACTIVE MENU ---- ??
     students = []
+    
     #get first name
     name = gets.strip.to_sym
         #while name is not empty, repeat code
@@ -179,7 +205,7 @@ def print_footer(students)
     puts "----------------------".center($center)
 end
 
-students = input_students
+interactive_menu
 print(students)
 
 =begin
