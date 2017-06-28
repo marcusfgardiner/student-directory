@@ -88,14 +88,14 @@ end
 def save_students
     filename = choose_filename
     #open the file for writing
-    file = File.open(filename,"w")
+    File.open(filename,"w") do |file|
     #iterate over array of students
     @students.each do |student|
         student_data = [student[:name], student[:cohort], student[:hobbies], student[:birth_country], student[:height]]
         csv_line = student_data.join(",")
         file.puts csv_line
+        end
     end
-    file.close
 end
 
 def try_load_students
@@ -111,12 +111,10 @@ def try_load_students
 end
 
 def load_students(filename)
-    file = File.open(filename, "r")
-    file.readlines.each do |line|
+    File.read(filename).each_line {|line|
     name, cohort, hobbies, birth_country, height = line.chomp.split(',')
     add_into_student_directory(name, cohort, hobbies, birth_country, height)
-    end
-    file.close
+    }
     puts "Loaded #{@students.count} pieces of student data from #{filename}"
 end
 
