@@ -91,9 +91,14 @@ def save_students
     filename = choose_filename
     #open the file for writing
     CSV.open(filename, "wb") do |file|
-    #iterate over array of students
-    file << @students
-    puts @students
+        #iterate over array of students
+        file << @students.each do |student|
+        student_data = [student[:name], student[:cohort], student[:hobbies], student[:birth_country], student[:height]]
+        csv_line = student_data.join(",")
+        file.puts csv_line
+        end
+        #puts @students
+    end
 =begin
 #Old method before used CSV method
     @students.each do |student|
@@ -102,7 +107,7 @@ def save_students
         file.puts csv_line
         end
 =end
-    end
+    
 end
 
 def try_load_students
