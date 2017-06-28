@@ -16,6 +16,26 @@ def line_space
     puts "---------------------".center($center)
 end
 
+def choose_filename
+    puts "If you would like to choose a filename other than students.csv, type it in below. Otherwise press enter and students.csv will be used"
+    filename = STDIN.gets.strip
+    check_filename(filename)
+end
+
+def check_filename(filename)
+    puts "filename given is #{filename}"
+    if filename.nil? #get out of method if file name not given
+        puts "No file name given, will use standard file 'students.csv'"
+        return "students.csv"
+    elsif File.exists?(filename) #if file exists, do this
+        puts "File exists, will use the file #{filename}"
+        return filename
+    else
+        puts "Sorry, #{filename} doesn't exist. Exiting program"
+        exit #quit program
+    end 
+end
+
 def print_menu
     #1. Print the menu and ask what the user wants to do
     line_space
@@ -23,8 +43,8 @@ def print_menu
     line_space
     puts "1. Input the students"
     puts "2. Show the students"
-    puts "3. Save the list to students.csv"
-    puts "4. Re-load the list from students.csv to get rid of changes"
+    puts "3. Save the list to file name provided (default file is students.csv)"
+    puts "4. Re-load the list from file name provided (default file is students.csv) to get rid of changes"
     puts "5. Fix typos in the script or add information where no value was previously provided"
     puts "9. Exit" #9 as more items to come
 end
@@ -49,7 +69,8 @@ def process(selection)
         when "4"
             puts "Option 4 - Re-load directory selected:"
             @students = []
-            load_students
+            filename = choose_filename
+            load_students(filename)
             line_space
             puts "Task 4 complete - students list loaded"
         when "5"
@@ -66,8 +87,9 @@ def process(selection)
 end
 
 def save_students
+    filename = choose_filename
     #open the file for writing
-    file = File.open("students.csv","w")
+    file = File.open(filename,"w")
     #iterate over array of students
     @students.each do |student|
         student_data = [student[:name], student[:cohort], student[:hobbies], student[:birth_country], student[:height]]
@@ -78,24 +100,17 @@ def save_students
 end
 
 def try_load_students
-    filename = ARGV.first #first argument from command line is taken
-    if filename.nil? #get out of method if file name not given
-        filename = "students.csv"
-        load_students(filename)
+    filename_ARGV = ARGV.first #first argument from command line is taken
+    filename = check_filename(filename_ARGV)
+    load_students(filename)
         if @students.count == 0
             puts "No file name provided with script and no student data yet in default file #{filename}"
         else
             puts "No file name provided with script. Loaded #{@students.count} pieces of student data from default file #{filename}"
         end
-    elsif File.exists?(filename) #if file exists, do this
-        load_students(filename)
-    else
-        puts "Sorry, #{filename} doesn't exist"
-        exit #quit program
-    end
 end
 
-def load_students(filename = "students.csv")
+def load_students(filename)
     file = File.open(filename, "r")
     file.readlines.each do |line|
     name, cohort, hobbies, birth_country, height = line.chomp.split(',')
