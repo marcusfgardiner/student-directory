@@ -12,11 +12,15 @@ def interactive_menu
     end
 end
 
+def line_space
+    puts "---------------------".center($center)
+end
+
 def print_menu
     #1. Print the menu and ask what the user wants to do
-    puts "---------------------".center($center)
+    line_space
     puts "Interactive menu - put in the number of what you want to do".center($center)
-    puts "---------------------".center($center)
+    line_space
     puts "1. Input the students"
     puts "2. Show the students"
     puts "3. Save the list to students.csv"
@@ -28,17 +32,33 @@ end
 def process(selection)
     case selection
         when "1"
+            puts "Option 1 - input the students selected:"
             input_students
+            line_space
+            puts "Task 1 complete - students inputted"
         when "2"
+            puts "Option 2 - print the student list selected:"
             print_students_list
+            line_space
+            puts "Task 2 complete - students list printed"
         when "3"
+            puts "Option 3 - save students list to file selected:"
             save_students
+            line_space
+            puts "Task 3 complete - students list saved"
         when "4"
+            puts "Option 4 - Re-load directory selected:"
             @students = []
             load_students
+            line_space
+            puts "Task 4 complete - students list loaded"
         when "5"
+            puts "Option 5 - typo or data overwrite selected:"
             typo_handler
+            line_space
+            puts "Task 5 complete - value updated/ typo fixed"
         when "9"
+            puts "Option 9 - Close program selected, now exiting"
             exit #terminates program
         else
             puts "I don't know what you meant, please try again"
@@ -55,7 +75,6 @@ def save_students
         file.puts csv_line
     end
     file.close
-    puts "Student data saved"
 end
 
 def try_load_students
@@ -182,7 +201,6 @@ def typo_handler
             end
         puts "What should value be changed to?"
         @students[index_number][variables_issue] = user_input_handler
-        puts "Typo is now fixed!"
 end
 
 
@@ -190,7 +208,7 @@ end
 
 def print_header
     puts "The students of Villains Academy".center($center)
-    puts "----------------------".center($center)
+    line_space
 end
 
 
@@ -254,13 +272,13 @@ def print_students_list
 end
 
 def print_footer
-    puts "----------------------".center($center)
+    line_space
             if @students.count == 1
                 puts "Overall, we have #{@students.count} great student".center($center)
             else
                 puts "Overall, we have #{@students.count} great students".center($center)
             end 
-    puts "----------------------".center($center)
+    line_space
 end
 
 try_load_students
