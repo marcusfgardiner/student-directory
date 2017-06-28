@@ -14,10 +14,14 @@ end
 
 def print_menu
     #1. Print the menu and ask what the user wants to do
+    puts "---------------------".center($center)
+    puts "Interactive menu - put in the number of what you want to do".center($center)
+    puts "---------------------".center($center)
     puts "1. Input the students"
     puts "2. Show the students"
     puts "3. Save the list to students.csv"
     puts "4. Load the list from students.csv"
+    puts "5. Fix typos in the script or add information where no value was previously provided"
     puts "9. Exit" #9 as more items to come
 end
 
@@ -31,6 +35,8 @@ def process(selection)
             save_students
         when "4"
             load_students
+        when "5"
+            typo_handler
         when "9"
             exit #terminates program
         else
@@ -43,11 +49,12 @@ def save_students
     file = File.open("students.csv","w")
     #iterate over array of students
     @students.each do |student|
-        student_data = [student[:name], student[:cohort]]
+        student_data = [student[:name], student[:cohort], student[:hobbies], student[:birth_country], student[:height]]
         csv_line = student_data.join(",")
         file.puts csv_line
     end
     file.close
+    puts "Student data saved"
 end
 
 def try_load_students
@@ -55,7 +62,11 @@ def try_load_students
     if filename.nil? #get out of method if file name not given
         filename = "students.csv"
         load_students(filename)
-        puts "No file name provided with script, so loaded #{@students.count} pieces of student data from default file #{filename}"
+        if @students.count == 0
+            puts "No file name provided with script and no student data yet in default file #{filename}"
+        else
+            puts "No file name provided with script. Loaded #{@students.count} pieces of student data from default file #{filename}"
+        end
     elsif File.exists?(filename) #if file exists, do this
         load_students(filename)
         puts "Loaded #{@students.count} pieces of student data from #{filename}"
@@ -131,48 +142,45 @@ end
 
 def typo_handler
     match = false
-    puts "From looking at the directory, are there any typos or would you like to add any values where there isn't currently one?"
-    puts "If so, write 'Yes', otherwise press enter"
-        typo_check = STDIN.gets.strip.downcase
-        if typo_check != "yes"
-            puts "Perfect, no typos - list confirmed"
-        else
-            while match == false
-            puts "Which name has a typo issue? If you wrote the name with a typo, please write the incorrectly spelled name"
-            name = STDIN.gets.strip.downcase.to_sym
-            index_number = ""
-            @students.each_with_index {|student, index|
-                if student[:name].downcase == name
-                    puts "Name match found, #{name}"
-                    index_number = index
-                end
-            }
-            
-                if index_number == ""
-                    match = false
-                    puts "Name not found, try again"
-                else
-                    match = true
-                end
+        while match == false
+        puts "Which name has a typo issue? If you wrote the name with a typo, please write the incorrectly spelled name"
+        name = gets.strip.downcase.to_sym
+        index_number = ""
+        @students.each_with_index {|student, index|
+            if student[:name].downcase.to_sym == name
+                puts "Name match found, #{name}"
+                index_number = index
             end
-            puts "Which variable has a typo? Choices are Name, Cohort, Hobbies, Country of birth and Height"
-            variables_issue = STDIN.gets.strip.downcase
-                if variables_issue == "name"
-                    variables_issue = :name
-                elsif variables_issue == "cohort"
-                    variables_issue = :cohort
-                elsif variables_issue == "hobbies"
-                    variables_issue = :hobbies
-                elsif variables_issue == "country of birth"
-                    variables_issue = :birth_country
-                elsif variables_issue == "height"
-                    variables_issue = :height
+        }
+        
+            if index_number == ""
+                puts "Name not found. If you would like to try again, write 'Yes', otherwise press enter"
+                    typo_check = STDIN.gets.strip.downcase
+                if typo_check == "yes"
+                    match = false
+                else
+                    return
                 end
-            puts "What should value be changed to?"
-            @students[index_number][variables_issue] = user_input_handler
-            puts "Typo is now fixed!"
-            print_students_list
+            else
+                match = true
+            end
         end
+        puts "Which variable has a typo? Choices are Name, Cohort, Hobbies, Country of birth and Height"
+        variables_issue = STDIN.gets.strip.downcase
+            if variables_issue == "name"
+                variables_issue = :name
+            elsif variables_issue == "cohort"
+                variables_issue = :cohort
+            elsif variables_issue == "hobbies"
+                variables_issue = :hobbies
+            elsif variables_issue == "country of birth"
+                variables_issue = :birth_country
+            elsif variables_issue == "height"
+                variables_issue = :height
+            end
+        puts "What should value be changed to?"
+        @students[index_number][variables_issue] = user_input_handler
+        puts "Typo is now fixed!"
 end
 
 
@@ -186,9 +194,8 @@ end
 
 def print_students_list
     if @students == []
-        puts "No students provided, exiting program"
-        exit
-    end
+        puts "No students provided, input some students first"
+    else
     puts "Now we will print the list of students. Would you like to set any conditions as you print the list?"
     puts "If so, write 'Yes', otherwise press enter"
         conditions = STDIN.gets.strip.downcase
@@ -224,7 +231,7 @@ def print_students_list
                         else
                             puts ((number_printed).to_s + " - #{@students[index][:name]}").center($center)
                             puts ("Country of birth:".ljust($left) + "#{@students[index][:birth_country]}".rjust($right))
-                                if @students[index][:height] = "No value provided"
+                                if @students[index][:height] == "No value provided"
                                     puts ("Height:".ljust($left) + "#{@students[index][:height]}".rjust($right))
                                 else 
                                     puts ("Height:".ljust($left) + "#{@students[index][:height]} metres".rjust($right))
@@ -240,10 +247,8 @@ def print_students_list
             }
             puts ""
         puts "Note: #{number_excluded} student(s) excluded due to applied conditions".center($center)
-    
     print_footer
-    
-    typo_handler
+    end
 end
 
 def print_footer
