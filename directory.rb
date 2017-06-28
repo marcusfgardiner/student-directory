@@ -12,22 +12,23 @@ def print_menu
     puts "9. Exit" #9 as more items to come
 end
 
-def interactive_menu
-    loop do
-        print_menu
-        #2. read the input and save it into a variable
-        selection = gets.chomp
-        #3. do what the user has asked
-        case selection
+def process(selection)
+    case selection
         when "1"
             input_students
         when "2"
-            print
+            print_students_list
         when "9"
             exit #terminates program
         else
             puts "I don't know what you meant, please try again"
-        end
+    end
+end
+
+def interactive_menu
+    loop do
+        print_menu
+        process(gets.chomp)
     end
 end
 
@@ -90,7 +91,7 @@ def typo_handler
             puts "What should value be changed to?"
             @students[index_number][variables_issue] = user_input_handler
             puts "Typo is now fixed!"
-            print(@students)
+            print_students_list
         end
 end
 
@@ -133,7 +134,7 @@ def print_header
 end
 
 
-def print
+def print_students_list
     if @students == []
         puts "No students provided, exiting program"
         exit
