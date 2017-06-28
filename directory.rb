@@ -20,7 +20,7 @@ def print_menu
     puts "1. Input the students"
     puts "2. Show the students"
     puts "3. Save the list to students.csv"
-    puts "4. Load the list from students.csv"
+    puts "4. Re-load the list from students.csv to get rid of changes"
     puts "5. Fix typos in the script or add information where no value was previously provided"
     puts "9. Exit" #9 as more items to come
 end
@@ -34,6 +34,7 @@ def process(selection)
         when "3"
             save_students
         when "4"
+            @students = []
             load_students
         when "5"
             typo_handler
@@ -69,7 +70,6 @@ def try_load_students
         end
     elsif File.exists?(filename) #if file exists, do this
         load_students(filename)
-        puts "Loaded #{@students.count} pieces of student data from #{filename}"
     else
         puts "Sorry, #{filename} doesn't exist"
         exit #quit program
@@ -83,6 +83,7 @@ def load_students(filename = "students.csv")
     add_into_student_directory(name, cohort, hobbies, birth_country, height)
     end
     file.close
+    puts "Loaded #{@students.count} pieces of student data from #{filename}"
 end
 
 def add_into_student_directory(name, cohort, hobbies, birth_country, height)
@@ -120,8 +121,6 @@ def input_students
         name = STDIN.gets.strip.to_sym
         end
 end
-
-
 
 def unique_cohorts
     cohort_array = @students.map {|student| 
@@ -177,6 +176,9 @@ def typo_handler
                 variables_issue = :birth_country
             elsif variables_issue == "height"
                 variables_issue = :height
+            else
+                puts "Variable doesn't exist, back to main menu"
+                return
             end
         puts "What should value be changed to?"
         @students[index_number][variables_issue] = user_input_handler
