@@ -5,6 +5,39 @@ $right = 20
 
 @students = []
 
+def interactive_menu
+    loop do
+        print_menu
+        process(STDIN.gets.chomp)
+    end
+end
+
+def print_menu
+    #1. Print the menu and ask what the user wants to do
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "3. Save the list to students.csv"
+    puts "4. Load the list from students.csv"
+    puts "9. Exit" #9 as more items to come
+end
+
+def process(selection)
+    case selection
+        when "1"
+            input_students
+        when "2"
+            print_students_list
+        when "3"
+            save_students
+        when "4"
+            load_students
+        when "9"
+            exit #terminates program
+        else
+            puts "I don't know what you meant, please try again"
+    end
+end
+
 def save_students
     #open the file for writing
     file = File.open("students.csv","w")
@@ -35,44 +68,49 @@ end
 def load_students(filename = "students.csv")
     file = File.open(filename, "r")
     file.readlines.each do |line|
-    name, cohort = line.chomp.split(',')
-        @students << {name: name, cohort: cohort.to_sym}
+    name, cohort, hobbies, birth_country, height = line.chomp.split(',')
+    add_into_student_directory(name, cohort, hobbies, birth_country, height)
     end
     file.close
 end
 
-def print_menu
-    #1. Print the menu and ask what the user wants to do
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "3. Save the list to students.csv"
-    puts "4. Load the list from students.csv"
-    puts "9. Exit" #9 as more items to come
+def add_into_student_directory(name, cohort, hobbies, birth_country, height)
+     @students << {name: name, cohort: cohort, hobbies: hobbies, birth_country: birth_country, height: height}
+            if @students.count == 1
+                puts "#{@students.count} student in the directory"
+            else
+                puts "#{@students.count} students in the directory"
+            end 
 end
 
-def process(selection)
-    case selection
-        when "1"
-            input_students
-        when "2"
-            print_students_list
-        when "3"
-            save_students
-        when "4"
-            load_students
-        when "9"
-            exit #terminates program
-        else
-            puts "I don't know what you meant, please try again"
-    end
+def input_students
+    puts "Please enter the names of the students"
+    puts "To finish, just hit enter twice when prompted for a name"
+    #create an empty array
+    
+    #get first name
+    name = STDIN.gets.strip.to_sym
+        #while name is not empty, repeat code
+        while !name.empty?
+        #Ask for more details
+        puts "What cohort are they from?"
+        cohort = user_input_handler
+        puts "What hobbies do they have?"
+        hobbies = user_input_handler
+        puts "What is their country of birth?"
+        birth_country = user_input_handler
+        puts "What is their height in metres?"
+        height = user_input_handler
+        #add student hash to the array
+        add_into_student_directory(name, cohort, hobbies, birth_country, height)
+        puts ""
+        puts "If you want to enter more students, type their name now, otherwise hit enter"
+        #Get another name from user
+        name = STDIN.gets.strip.to_sym
+        end
 end
 
-def interactive_menu
-    loop do
-        print_menu
-        process(STDIN.gets.chomp)
-    end
-end
+
 
 def unique_cohorts
     cohort_array = @students.map {|student| 
@@ -137,37 +175,7 @@ def typo_handler
         end
 end
 
-def input_students
-    puts "Please enter the names of the students"
-    puts "To finish, just hit enter twice when prompted for a name"
-    #create an empty array
-    
-    #get first name
-    name = STDIN.gets.strip.to_sym
-        #while name is not empty, repeat code
-        while !name.empty?
-        #Ask for more details
-        puts "What cohort are they from?"
-        cohort = user_input_handler
-        puts "What hobbies do they have?"
-        hobbies = user_input_handler
-        puts "What is their country of birth?"
-        birth_country = user_input_handler
-        puts "What is their height in metres?"
-        height = user_input_handler
-        #add student hash to the array
-        @students << {name: name, cohort: cohort, hobbies: hobbies, birth_country: birth_country, height: height}
-            if @students.count == 1
-                puts "Now we have #{@students.count} student"
-            else
-                puts "Now we have #{@students.count} students"
-            end 
-        puts ""
-        puts "If you want to enter more students, type their name now, otherwise hit enter"
-        #Get another name from user
-        name = STDIN.gets.strip.to_sym
-        end
-end
+
 
 
 def print_header
