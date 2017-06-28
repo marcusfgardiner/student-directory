@@ -23,16 +23,15 @@ def choose_filename
 end
 
 def check_filename(filename)
-    puts "filename given is #{filename}"
-    if filename.nil? #get out of method if file name not given
+    if filename.to_s == "" #get out of method if file name not given
         puts "No file name given, will use standard file 'students.csv'"
         return "students.csv"
     elsif File.exists?(filename) #if file exists, do this
         puts "File exists, will use the file #{filename}"
         return filename
     else
-        puts "Sorry, #{filename} doesn't exist. Exiting program"
-        exit #quit program
+        puts "Sorry, file '#{filename}'' doesn't exist. Loading interactive menu"
+        interactive_menu
     end 
 end
 
@@ -108,6 +107,7 @@ def try_load_students
         else
             puts "No file name provided with script. Loaded #{@students.count} pieces of student data from default file #{filename}"
         end
+    interactive_menu
 end
 
 def load_students(filename)
@@ -297,7 +297,6 @@ def print_footer
 end
 
 try_load_students
-interactive_menu
 
 =begin
 
