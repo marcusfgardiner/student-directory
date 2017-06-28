@@ -1,20 +1,4 @@
-# Put all students into an array
-
-students_hash = [
-  {name: "Dr. Hannibal Lecter", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
-  {name: "Dr. Hannibal Lecter", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
-  {name: "Darth Vader",cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
-  {name: "Nurse Ratched", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
-  {name: "Michael Corleone", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
-  {name: "Alex DeLarge", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
-  {name: "The Wicked Witch of the West", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
-  {name: "Terminator", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
-  {name: "Freddy Krueger", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
-  {name: "The Joker", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
-  {name: "Joffrey Baratheon", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
-  {name: "Norman Bates", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"}
-]
-
+# Global alignment variables
 $left = 20
 $center = 40
 $right = 20
@@ -200,11 +184,28 @@ print(students)
 
 =begin
 
-each version of printing student names
+-----each version of printing student names
 
 students.each_with_index {|student, index|
     next if (specific_letter != nil && student[:name][0].downcase != specific_letter.downcase) || ((twelve_characters == "yes") && (student[:name].length > 11))
     puts (index + 1).to_s + " #{student[:name]} (#{student[:cohort]} cohort)"
     }
+    
+-----hash to test with
+    
+students_hash = [
+  {name: "Dr. Hannibal Lecter", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Dr. Hannibal Lecter", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Darth Vader",cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Nurse Ratched", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Michael Corleone", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Alex DeLarge", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "The Wicked Witch of the West", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Terminator", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Freddy Krueger", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "The Joker", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Joffrey Baratheon", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"},
+  {name: "Norman Bates", cohort: :november, hobbies: "Hobby", birth_country: "a place", height: "10"}
+]
 
 =end
