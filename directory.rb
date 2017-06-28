@@ -1,3 +1,5 @@
+require 'csv'
+
 # Global alignment variables
 $left = 20
 $center = 40
@@ -88,13 +90,18 @@ end
 def save_students
     filename = choose_filename
     #open the file for writing
-    File.open(filename,"w") do |file|
+    CSV.open(filename, "wb") do |file|
     #iterate over array of students
+    file << @students
+    puts @students
+=begin
+#Old method before used CSV method
     @students.each do |student|
         student_data = [student[:name], student[:cohort], student[:hobbies], student[:birth_country], student[:height]]
         csv_line = student_data.join(",")
         file.puts csv_line
         end
+=end
     end
 end
 
@@ -110,11 +117,19 @@ def try_load_students
     interactive_menu
 end
 
+
 def load_students(filename)
-    File.read(filename).each_line {|line|
+    @students = CSV.read(filename) 
+    puts @students
+=begin 
+#OLD METHOD OF READING FROM FILE
+    do |line|
+    #File.read(filename).each_line do |line|
     name, cohort, hobbies, birth_country, height = line.chomp.split(',')
     add_into_student_directory(name, cohort, hobbies, birth_country, height)
-    }
+    end
+=end
+
     puts "Loaded #{@students.count} pieces of student data from #{filename}"
 end
 
@@ -226,6 +241,7 @@ end
 
 
 def print_students_list
+    puts @students
     if @students == []
         puts "No students provided, input some students first"
     else
@@ -293,6 +309,7 @@ def print_footer
             end 
     line_space
 end
+
 
 try_load_students
 
