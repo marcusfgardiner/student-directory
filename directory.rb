@@ -132,7 +132,6 @@ def input_students
     puts "Please enter the names of the students"
     puts "To finish, just hit enter twice when prompted for a name"
     #create an empty array
-    
     #get first name
     name = STDIN.gets.strip.to_sym
         #while name is not empty, repeat code
