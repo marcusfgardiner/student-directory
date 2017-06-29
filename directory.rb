@@ -89,16 +89,20 @@ end
 
 def save_students
     filename = choose_filename
-    #open the file for writing
-    CSV.open(filename, "wb") do |file|
-        #iterate over array of students
-        file << @students.each do |student|
-        student_data = [student[:name], student[:cohort], student[:hobbies], student[:birth_country], student[:height]]
-        csv_line = student_data.join(",")
-        file.puts csv_line
-        end
-        #puts @students
+    CSV.open(filename, "wb") do |csv|
+    @students.each do |hash|
+    csv << hash.values
     end
+    end
+    
+    #open the file for writing
+    #CSV.open(filename, "w") do |csv_object|
+    #    @students.each do |row|
+    #        csv_object << row
+        #iterate over array of students
+    #    end
+        #puts @students
+    #end
 =begin
 #Old method before used CSV method
     @students.each do |student|
@@ -124,8 +128,11 @@ end
 
 
 def load_students(filename)
-    @students = CSV.read(filename) 
-    puts @students
+    CSV.foreach('students.csv') do |row|
+    puts row.inspect
+    end
+   # @students = CSV.read(filename) 
+   # puts @students
 =begin 
 #OLD METHOD OF READING FROM FILE
     do |line|
