@@ -94,24 +94,6 @@ def save_students
     csv << hash.values
     end
     end
-    
-    #open the file for writing
-    #CSV.open(filename, "w") do |csv_object|
-    #    @students.each do |row|
-    #        csv_object << row
-        #iterate over array of students
-    #    end
-        #puts @students
-    #end
-=begin
-#Old method before used CSV method
-    @students.each do |student|
-        student_data = [student[:name], student[:cohort], student[:hobbies], student[:birth_country], student[:height]]
-        csv_line = student_data.join(",")
-        file.puts csv_line
-        end
-=end
-    
 end
 
 def try_load_students
@@ -128,19 +110,11 @@ end
 
 
 def load_students(filename)
-    CSV.foreach('students.csv') do |row|
-    puts row.inspect
+    
+    CSV.foreach(filename) do |row|
+        name, cohort, hobbies, birth_country, height = row
+        add_into_student_directory(name, cohort, hobbies, birth_country, height)
     end
-   # @students = CSV.read(filename) 
-   # puts @students
-=begin 
-#OLD METHOD OF READING FROM FILE
-    do |line|
-    #File.read(filename).each_line do |line|
-    name, cohort, hobbies, birth_country, height = line.chomp.split(',')
-    add_into_student_directory(name, cohort, hobbies, birth_country, height)
-    end
-=end
 
     puts "Loaded #{@students.count} pieces of student data from #{filename}"
 end
@@ -253,7 +227,6 @@ end
 
 
 def print_students_list
-    puts @students
     if @students == []
         puts "No students provided, input some students first"
     else
